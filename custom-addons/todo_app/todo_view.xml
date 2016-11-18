@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<openerp>
+	<data>
+
+		<record id="view_form_todo_task" model="ir.ui.view">
+			<field name="name">To-do Task Form</field> <!-- The title of the form -->
+			<field name="model">todo.task</field> <!-- The corresponding data model (it call the todo.task model that we defined in todo_model.py) -->
+			<field name="arch" type="xml"> <!-- The most important tag to define the form view. Here we  -->
+				<form>
+					<header> <!-- Design the header of the form, it includes buttons and filters -->
+						<button name="do_toggle_done" type="object" string="Toggle Done" class="oe_highlight" /> <!-- this button will call the do_toggle_done function which we declared in todo_model.py -->
+						<button name="do_clear_done" type="object" string="Clear All Done" /> <!-- similarly, this will perform do_clear_done funtion when the user click -->
+					</header>
+
+					<sheet> <!-- The lower section of header -->
+						<group name="group_top">
+							<group name="group_left"> <!-- We intend to place the file 'name' on the left side of the data form -->
+								<field name="name"/>
+							</group>
+							<group name="group_right"> <!-- and the 3 other fiels on the righ side of input form -->
+								<field name="is_done"/>
+								<field name="active"/>
+								<field name="remarks"/>
+							</group>
+						</group>
+					</sheet>
+				</form>
+			</field>
+		</record>
+
+		<!-- The following section defines the list view layout of model -->
+		<record id="view_tree_todo_task" model="ir.ui.view">
+			<field name="name">To-do Task</field>
+			<field name="model">todo.task</field>
+			<field name="arch" type="xml">
+				<tree colors="gray:is_done==True">
+					<field name="name"/>
+					<field name="is_done"/>
+					<field name="remarks"/>
+				</tree>
+			</field>
+		</record>
+
+		<!-- The following section set default filter at to top-right corner with view_filter_todo_task tag -->
+		<record id="view_filter_todo_task" model="ir.ui.view">
+			<field name="name">To-do Tasks filter</field>
+			<field name="model">todo.task</field>
+			<field name="arch" type="xml">
+				<search>
+					<field name="name"/>
+					<filter string="Not Done" domain="[('is_done','=',False)]"/>
+					<filter string="Done" domain="[('is_done','=',True)]"/>
+				</search>
+			</field>
+		</record>
+
+		<!-- Action to open To-do task list -->
+		<act_window id="action_todo_task" name="To-do Task" res_model="todo.task" view_mode="tree,form" />
+
+		<!-- Menu item to open To-do task list -->
+		<menuitem id="menu_todo_task" name="To-do Tasks" parent="mail.mail_channel_menu_root_chat" sequence="20" action="action_todo_task" />
+	</data>
+</openerp>
